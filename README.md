@@ -108,6 +108,19 @@ Task updates are pushed to connected clients using Server-Sent Events (SSE).
 Supports light and dark themes with persisted user preference.
 
 ---
+# Demo Credentials
+
+## Admin Account
+
+Email: admin@taskflow.com
+
+Password:password123
+
+## User Account
+
+Email: user@taskflow.com
+
+Password: password123
 
 # Environment Variables
 
