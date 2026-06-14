@@ -45,17 +45,14 @@ model Task {
   id          String   @id @default(uuid())
 
   title       String
-
   description String?
 
   status      TaskStatus   @default(TODO)
-
   priority    TaskPriority @default(MEDIUM)
 
   dueDate     DateTime?
 
   userId      String
-
   user        User @relation(fields: [userId], references: [id])
 
   createdAt   DateTime @default(now())
@@ -64,4 +61,7 @@ model Task {
   @@index([userId])
   @@index([status])
   @@index([dueDate])
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
 }
