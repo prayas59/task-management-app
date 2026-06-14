@@ -14,9 +14,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Task Management App",
-  description: "Full Stack Task Management Application",
+export const metadata = {
+  title: "TaskFlow",
+  description:
+    "Modern task management platform with real-time updates and activity tracking",
 };
 
 export default function RootLayout({
