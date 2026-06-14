@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const [sortBy, setSortBy] = useState("createdAt");
   const [debouncedSearch] = useDebounce(search, 500);
   const { data: me } = useAuth();
+  console.log("AUTH DATA:", me);
   const { data, isLoading, isFetching, error } = useTasks({
     page,
     limit: 10,
