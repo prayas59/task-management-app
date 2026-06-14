@@ -1,81 +1,153 @@
 # TaskFlow - Full Stack Task Management Application
 
-## Overview
+A full-stack task management platform built as part of the Rival.io Full-Stack Developer Assessment.
 
-TaskFlow is a full-stack task management application built using:
+## Tech Stack
 
-- Frontend: Next.js 16 + TypeScript + Tailwind CSS
-- Backend: Express.js + TypeScript
-- Database: PostgreSQL + Prisma ORM
-- Authentication: JWT + HTTP Only Cookies
-- Real-Time Updates: Server Sent Events (SSE)
-- Dockerized Setup using Docker Compose
+### Frontend
 
-## Features
+- Next.js 16
+- TypeScript
+- Tailwind CSS
+- TanStack Query
 
-### Authentication
+### Backend
 
-- User Signup
-- User Login
-- Secure Password Hashing using bcrypt
+- Express.js
+- TypeScript
+- Prisma ORM
 - JWT Authentication
-- Persistent Login Sessions
 
-### Task Management
+### Database
 
-- Create Task
-- Update Task
-- Delete Task
-- View Single Task
-- View All Tasks
-
-### Search & Filtering
-
-- Search Tasks by Title
-- Filter by Status
-- Sort by:
-  - Created Date
-  - Due Date
-  - Priority
-
-### Authorization
-
-- Users can only access their own tasks
-- Admin role can view all users' tasks
+- PostgreSQL
 
 ### Additional Features
 
-- Real-time task updates using SSE
-- File attachments for tasks
+- Role-Based Access Control (Admin/User)
+- Server-Sent Events (SSE) Real-Time Updates
+- File Attachments
 - Dark Mode
-- Responsive UI
-- Pagination
-- Optimistic UI Updates
+- Docker Support
 
 ---
 
-## Environment Variables
+# Features
 
-### Backend (.env)
+## Authentication
+
+- User Signup
+- User Login
+- Secure Password Hashing (bcrypt)
+- JWT Authentication
+- Persistent Login Sessions
+- Protected Routes
+
+## Task Management
+
+- Create Tasks
+- Update Tasks
+- Delete Tasks
+- View Single Task
+- View All Tasks
+
+Each task contains:
+
+- Title
+- Description
+- Status
+- Priority
+- Due Date
+- Attachments
+
+## Search, Filter & Sort
+
+### Search
+
+- Search tasks by title
+
+### Filters
+
+- TODO
+- IN_PROGRESS
+- COMPLETED
+
+### Sorting
+
+- Created Date
+- Due Date
+- Priority
+
+Search, filters, sorting and pagination work together.
+
+## Authorization
+
+### User
+
+Users can:
+
+- View their own tasks
+- Create their own tasks
+- Update their own tasks
+- Delete their own tasks
+
+### Admin
+
+Admins can:
+
+- View all users
+- View all tasks
+- Filter and search across all tasks
+
+## Real-Time Updates
+
+Task updates are pushed to connected clients using Server-Sent Events (SSE).
+
+## Dark Mode
+
+Supports light and dark themes with persisted user preference.
+
+---
+
+# Environment Variables
+
+## Backend (.env)
 
 ```env
 PORT=5001
-DATABASE_URL=
-JWT_SECRET=
-CLIENT_URL=http://localhost:3000
+
+DATABASE_URL=postgresql://user:password@host:5432/dbname
+
+JWT_SECRET=super-secret-key-minimum-10-chars
+
+APP_URL=http://localhost:5001
+
+FRONTEND_URL=http://localhost:3000
+
+NODE_ENV=development
 ```
 
-### Frontend (.env)
+## Frontend (.env)
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5001/api
+NEXT_PUBLIC_API_URL=http://localhost:5001/api/v1
+
+NEXT_PUBLIC_SOCKET_URL=http://localhost:5001
 ```
 
 ---
 
-## Local Development
+# Local Development Setup
 
-### Backend
+## 1. Clone Repository
+
+```bash
+git clone <repository-url>
+
+cd task-management-app
+```
+
+## 2. Setup Backend
 
 ```bash
 cd backend
@@ -84,12 +156,16 @@ npm install
 
 npx prisma generate
 
-npx prisma migrate deploy
-
 npm run dev
 ```
 
-### Frontend
+Backend runs on:
+
+```text
+http://localhost:5001
+```
+
+## 3. Setup Frontend
 
 ```bash
 cd frontend
@@ -99,38 +175,76 @@ npm install
 npm run dev
 ```
 
+Frontend runs on:
+
+```text
+http://localhost:3000
+```
+
 ---
 
-## Docker Setup
+# Docker Setup
 
-### Start Application
+## Start Application
 
 ```bash
 docker compose up --build
 ```
 
-### Stop Application
+## Stop Application
 
 ```bash
 docker compose down
 ```
 
-### Services
+## Docker Services
 
-Frontend:
+### Frontend
+
+```text
 http://localhost:3000
+```
 
-Backend:
+### Backend
+
+```text
 http://localhost:5001
+```
 
-PostgreSQL:
+### PostgreSQL
+
+```text
 localhost:5433
+```
 
 ---
 
-## Running Tests
+# API Endpoints
 
-Backend Tests:
+## Authentication
+
+```http
+POST /api/v1/auth/signup
+POST /api/v1/auth/login
+POST /api/v1/auth/logout
+GET  /api/v1/auth/me
+```
+
+## Tasks
+
+```http
+POST   /api/v1/tasks
+GET    /api/v1/tasks
+GET    /api/v1/tasks/:id
+PATCH  /api/v1/tasks/:id
+DELETE /api/v1/tasks/:id
+```
+
+---
+
+# Testing
+
+Run backend tests:
 
 ```bash
 cd backend
@@ -138,37 +252,39 @@ cd backend
 npm test
 ```
 
----
-
-## Admin Credentials
-
-Create an admin user directly in the database or update a user's role to ADMIN.
+At least 3 automated tests are included.
 
 ---
 
-## Project Structure
+# Assumptions & Trade-offs
+
+- JWT is stored in secure HTTP-only cookies.
+- SSE was chosen for lightweight real-time communication.
+- Prisma was used for type-safe database access.
+- PostgreSQL was selected as the primary relational database.
+
+---
+
+# Project Structure
 
 ```text
-frontend/
-backend/
-docker-compose.yml
+task-management-app
+│
+├── frontend
+│
+├── backend
+│
+├── docker-compose.yml
+│
+└── README.md
 ```
 
 ---
 
-## Assumptions & Trade-offs
+# Author
 
-- JWT stored in HTTP-only cookies.
-- SSE used for lightweight real-time updates.
-- PostgreSQL chosen for reliability and relational data support.
-- Prisma used for type-safe database access.
-
----
-
-## Author
-
-Prayas Godara
+**Prayas Godara**
 
 Email: [prayasgodara.workspace@gmail.com](mailto:prayasgodara.workspace@gmail.com)
-LinkedIn: https://linkedin.com/in/prayasgodara
+
 GitHub: https://github.com/prayas59
