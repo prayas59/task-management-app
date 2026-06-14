@@ -2,6 +2,7 @@ import { ApiError } from "../../common/responses/api-error";
 import { prisma } from "../../lib/prisma";
 import { TaskRepository } from "./task.repository";
 import { getIO } from "../../socket";
+import { ta } from "zod/v4/locales";
 export class TaskService {
   private taskRepository = new TaskRepository();
 
@@ -18,11 +19,14 @@ export class TaskService {
       },
     });
 
-    getIO().emit("task-created");
-
-    getIO().emit("activity-updated", {
-      taskId: task.id,
-    });
+    try {
+      getIO().emit("task-created");
+    } catch {}
+    try {
+      getIO().emit("activity-updated", {
+        taskId: task.id,
+      });
+    } catch {}
 
     return task;
   }
@@ -58,9 +62,11 @@ export class TaskService {
         },
       });
 
-      getIO().emit("activity-updated", {
-        taskId,
-      });
+      try {
+        getIO().emit("activity-updated", {
+          taskId,
+        });
+      } catch {}
     }
     if (data.priority && data.priority !== existingTask.priority) {
       await prisma.taskActivity.create({
@@ -72,12 +78,16 @@ export class TaskService {
         },
       });
 
-      getIO().emit("activity-updated", {
-        taskId,
-      });
+      try {
+        getIO().emit("activity-updated", {
+          taskId,
+        });
+      } catch {}
     }
 
-    getIO().emit("task-updated");
+    try {
+      getIO().emit("task-updated");
+    } catch {}
 
     return updatedTask;
   }
@@ -91,13 +101,16 @@ export class TaskService {
       },
     });
 
-    getIO().emit("activity-updated", {
-      taskId,
-    });
+    try {
+      getIO().emit("activity-updated", {
+        taskId,
+      });
+    } catch {}
     const task = await this.taskRepository.delete(taskId);
 
-    getIO().emit("task-deleted");
-
+    try {
+      getIO().emit("task-deleted");
+    } catch {}
     return task;
   }
 
