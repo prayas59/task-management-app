@@ -10,6 +10,8 @@ export const createTaskSchema = z.object({
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]).optional(),
 
   dueDate: z.string().datetime().optional(),
+
+  attachmentUrl: z.string().url().optional(),
 });
 
 export const updateTaskSchema = createTaskSchema.partial();

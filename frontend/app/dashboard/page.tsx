@@ -11,6 +11,7 @@ import TaskModal from "@/components/task/TaskModal";
 import Navbar from "@/components/ui/Navbar";
 import { useAuth } from "@/hooks/useAuth";
 import EmptyState from "@/components/ui/EmptyState";
+import ActivityModal from "@/components/task/ActivityModal";
 import ErrorState from "@/components/ui/ErrorState";
 import PageLoader from "@/components/ui/PageLoader";
 export default function DashboardPage() {
@@ -198,7 +199,16 @@ export default function DashboardPage() {
                         </div>
                       )}
                     </div>
-
+                    {task.attachmentUrl && (
+                      <a
+                        href={task.attachmentUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-500 underline"
+                      >
+                        📎 View Attachment
+                      </a>
+                    )}
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold
                     ${
@@ -243,6 +253,7 @@ export default function DashboardPage() {
                           Complete
                         </button>
                       )}
+                      <ActivityModal taskId={task.id} />
 
                       <TaskModal task={task} />
 

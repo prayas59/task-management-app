@@ -6,21 +6,23 @@ import authRoutes from "./modules/auth/auth.routes";
 import { errorMiddleware } from "./middleware/error.middleware";
 import taskRoutes from "./modules/task/task.routes";
 import adminRoutes from "./modules/task/admin.routes";
+import uploadRoutes from "./modules/task/upload.routes";
+
+import path from "path";
+import { env } from "process";
 const app = express();
 app.use(
   cors({
-    origin: true,
+    origin:
+      env.NODE_ENV === "production"
+        ? env.FRONTEND_URL
+        : "http://localhost:3000",
     credentials: true,
   }),
 );
 app.use(helmet());
 
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  }),
-);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use(cookieParser());
 
@@ -32,6 +34,7 @@ app.get("/health", (_, res) => {
     message: "API is healthy",
   });
 });
+app.use("/api/v1/upload", uploadRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/tasks", taskRoutes);
 app.use("/api/v1/admin", adminRoutes);

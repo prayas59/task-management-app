@@ -11,8 +11,18 @@ export class TaskService {
       dueDate: data.dueDate ? new Date(data.dueDate) : null,
       userId,
     });
+    await prisma.taskActivity.create({
+      data: {
+        taskId: task.id,
+        action: "TASK_CREATED",
+      },
+    });
 
     getIO().emit("task-created");
+
+    getIO().emit("activity-updated", {
+      taskId: task.id,
+    });
 
     return task;
   }
@@ -32,21 +42,58 @@ export class TaskService {
   }
 
   async updateTask(taskId: string, userId: string, data: any) {
-    await this.getTask(taskId, userId);
+    const existingTask = await this.getTask(taskId, userId);
 
-    const task = await this.taskRepository.update(taskId, {
+    const updatedTask = await this.taskRepository.update(taskId, {
       ...data,
       dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
     });
+    if (data.status && data.status !== existingTask.status) {
+      await prisma.taskActivity.create({
+        data: {
+          taskId,
+          action: "STATUS_CHANGED",
+          oldValue: existingTask.status,
+          newValue: data.status,
+        },
+      });
+
+      getIO().emit("activity-updated", {
+        taskId,
+      });
+    }
+    if (data.priority && data.priority !== existingTask.priority) {
+      await prisma.taskActivity.create({
+        data: {
+          taskId,
+          action: "PRIORITY_CHANGED",
+          oldValue: existingTask.priority,
+          newValue: data.priority,
+        },
+      });
+
+      getIO().emit("activity-updated", {
+        taskId,
+      });
+    }
 
     getIO().emit("task-updated");
 
-    return task;
+    return updatedTask;
   }
 
   async deleteTask(taskId: string, userId: string) {
     await this.getTask(taskId, userId);
+    await prisma.taskActivity.create({
+      data: {
+        taskId,
+        action: "TASK_DELETED",
+      },
+    });
 
+    getIO().emit("activity-updated", {
+      taskId,
+    });
     const task = await this.taskRepository.delete(taskId);
 
     getIO().emit("task-deleted");
@@ -83,10 +130,7 @@ export class TaskService {
     } else {
       orderBy.createdAt = "desc";
     }
-    console.log("WHERE:", where);
-    console.log("ORDERBY:", orderBy);
-    console.log("PAGE:", page);
-    console.log("LIMIT:", limit);
+
     const [tasks, total] = await Promise.all([
       this.taskRepository.findMany(where, skip, limit, orderBy),
       this.taskRepository.count(where),

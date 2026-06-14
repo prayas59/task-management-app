@@ -39,10 +39,6 @@ export class TaskController {
     }
   };
   listTasks = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    console.log("LIST TASKS HIT");
-    console.log("QUERY:", req.query);
-    console.log("USER:", req.user);
-
     try {
       const result = await this.taskService.listTasks(
         req.user!.userId,

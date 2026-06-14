@@ -7,6 +7,10 @@ const envSchema = z.object({
 
   JWT_SECRET: z.string().min(10),
 
+  APP_URL: z.string().url(),
+
+  FRONTEND_URL: z.string().url(),
+
   NODE_ENV: z.enum(["development", "production", "test"]),
 });
 

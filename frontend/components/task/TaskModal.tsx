@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import { uploadFile } from "@/services/upload.service";
 import { useTaskMutations } from "@/hooks/useTaskMutations";
 
 type TaskModalProps = {
@@ -10,7 +10,7 @@ type TaskModalProps = {
 
 export default function TaskModal({ task }: TaskModalProps) {
   const isEdit = !!task;
-
+  const [file, setFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
 
   const [title, setTitle] = useState(task?.title || "");
@@ -27,6 +27,13 @@ export default function TaskModal({ task }: TaskModalProps) {
   );
 
   const handleSubmit = async () => {
+    let attachmentUrl = task?.attachmentUrl;
+
+    if (file) {
+      const uploaded = await uploadFile(file);
+
+      attachmentUrl = uploaded.data.url;
+    }
     try {
       if (!title.trim()) {
         alert("Title is required");
@@ -41,6 +48,7 @@ export default function TaskModal({ task }: TaskModalProps) {
             description,
             priority,
             status,
+            attachmentUrl,
             dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
           },
         });
@@ -50,6 +58,7 @@ export default function TaskModal({ task }: TaskModalProps) {
           description,
           priority,
           status,
+          attachmentUrl,
           dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
         });
       }
@@ -139,6 +148,15 @@ export default function TaskModal({ task }: TaskModalProps) {
             <option value="IN_PROGRESS">⚡ IN PROGRESS</option>
             <option value="COMPLETED">✅ COMPLETED</option>
           </select>
+          <div>
+            <label className="block mb-2 text-sm font-medium">Attachment</label>
+
+            <input
+              type="file"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              className="w-full"
+            />
+          </div>
 
           <div className="flex gap-3 pt-3">
             <button

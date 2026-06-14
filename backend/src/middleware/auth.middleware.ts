@@ -12,8 +12,7 @@ export const authenticate = (
   next: NextFunction,
 ) => {
   const token = req.cookies?.token;
-  console.log("AUTH HIT");
-  console.log(req.cookies);
+
   if (!token) {
     return next(new ApiError(401, "Unauthorized"));
   }
