@@ -2,133 +2,173 @@
 
 ## Overview
 
-TaskFlow is a full-stack task management application built using Next.js, Express.js, PostgreSQL, Prisma, and TypeScript.
+TaskFlow is a full-stack task management application built using:
 
-The application allows users to manage tasks efficiently through authentication, task tracking, filtering, searching, sorting, file attachments, activity tracking, and real-time updates.
-
----
+- Frontend: Next.js 16 + TypeScript + Tailwind CSS
+- Backend: Express.js + TypeScript
+- Database: PostgreSQL + Prisma ORM
+- Authentication: JWT + HTTP Only Cookies
+- Real-Time Updates: Server Sent Events (SSE)
+- Dockerized Setup using Docker Compose
 
 ## Features
 
-### Authentication & Authorization
+### Authentication
 
 - User Signup
 - User Login
+- Secure Password Hashing using bcrypt
 - JWT Authentication
-- Secure Password Hashing (bcrypt)
-- Protected Routes
 - Persistent Login Sessions
-- Role-Based Access Control (User/Admin)
 
 ### Task Management
 
-- Create Tasks
-- Edit Tasks
-- Delete Tasks
-- View Tasks
-- Due Dates
-- Priority Levels
-- Status Management
+- Create Task
+- Update Task
+- Delete Task
+- View Single Task
+- View All Tasks
 
-### Search, Sort & Filter
+### Search & Filtering
 
-- Search by Title
+- Search Tasks by Title
 - Filter by Status
 - Sort by:
+  - Created Date
   - Due Date
   - Priority
-  - Created Date
 
-### Admin Features
+### Authorization
 
-- View All User Tasks
-- Search Tasks Across Users
-- Filter User Tasks
-- User Information Visibility
+- Users can only access their own tasks
+- Admin role can view all users' tasks
 
-### Real-Time Updates
+### Additional Features
 
-- Socket.IO Integration
-- Live Task Creation Updates
-- Live Task Update Notifications
-- Live Task Deletion Updates
-- Live Activity Log Refresh
-
-### Activity Log
-
-Tracks:
-
-- Task Created
-- Task Deleted
-- Status Changed
-- Priority Changed
-
-### File Attachments
-
-- Upload Documents
-- Upload Images
-- View Attachments
-
-### User Experience
-
-- Responsive Design
-- Mobile Friendly
+- Real-time task updates using SSE
+- File attachments for tasks
 - Dark Mode
-- Light Mode
+- Responsive UI
+- Pagination
 - Optimistic UI Updates
-- Loading States
-- Empty States
-- Error States
-
-### Quality Features
-
-- Unit/Integration Tests
-- Docker Support
-- GitHub Actions CI/CD
 
 ---
 
-## Technology Stack
+## Environment Variables
 
-### Frontend
+### Backend (.env)
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- React Query
-- Socket.IO Client
+```env
+PORT=5001
+DATABASE_URL=
+JWT_SECRET=
+CLIENT_URL=http://localhost:3000
+```
+
+### Frontend (.env)
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5001/api
+```
+
+---
+
+## Local Development
 
 ### Backend
 
-- Express.js
-- TypeScript
-- Prisma ORM
-- Socket.IO
-- JWT
+```bash
+cd backend
 
-### Database
+npm install
 
-- PostgreSQL
+npx prisma generate
+
+npx prisma migrate deploy
+
+npm run dev
+```
+
+### Frontend
+
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
 
 ---
 
-Admin Account
-Email: admin@taskflow.com
-Password: password123
+## Docker Setup
 
-User Account
-Email: user@taskflow.com
-Password: password123
+### Start Application
+
+```bash
+docker compose up --build
+```
+
+### Stop Application
+
+```bash
+docker compose down
+```
+
+### Services
+
+Frontend:
+http://localhost:3000
+
+Backend:
+http://localhost:5001
+
+PostgreSQL:
+localhost:5433
+
+---
+
+## Running Tests
+
+Backend Tests:
+
+```bash
+cd backend
+
+npm test
+```
+
+---
+
+## Admin Credentials
+
+Create an admin user directly in the database or update a user's role to ADMIN.
+
+---
+
+## Project Structure
+
+```text
+frontend/
+backend/
+docker-compose.yml
+```
+
+---
 
 ## Assumptions & Trade-offs
 
-### File Storage
+- JWT stored in HTTP-only cookies.
+- SSE used for lightweight real-time updates.
+- PostgreSQL chosen for reliability and relational data support.
+- Prisma used for type-safe database access.
 
-Current implementation stores files locally.
+---
 
-Trade-off:
+## Author
 
-- Simpler implementation
-- Suitable for local development
-- Files
+Prayas Godara
+
+Email: [prayasgodara.workspace@gmail.com](mailto:prayasgodara.workspace@gmail.com)
+LinkedIn: https://linkedin.com/in/prayasgodara
+GitHub: https://github.com/prayas59
