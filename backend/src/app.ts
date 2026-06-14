@@ -9,7 +9,7 @@ import adminRoutes from "./modules/task/admin.routes";
 import uploadRoutes from "./modules/task/upload.routes";
 
 import path from "path";
-import { env } from "process";
+import { env } from "./config/env";
 const app = express();
 app.use(
   cors({
