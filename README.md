@@ -107,7 +107,16 @@ Task updates are pushed to connected clients using Server-Sent Events (SSE).
 
 Supports light and dark themes with persisted user preference.
 
----
+-----------------------------------------------
+# IMPORTANT 
+## Browser Note
+
+Authentication uses secure HTTP-only cookies.
+
+When the frontend (Vercel) and backend (Render) are hosted on different domains, Safari's "Prevent Cross-Site Tracking" setting may block authentication cookies. Chrome, Edge, and Firefox work normally.
+
+In a production environment, this would typically be resolved using a shared custom domain (e.g. app.example.com and api.example.com) or an alternative token strategy.
+
 # Demo Credentials
 
 ## Admin Account
